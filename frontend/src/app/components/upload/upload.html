@@ -1,0 +1,65 @@
+<div class="container">
+
+  <h2>AI Journal Goal Generator</h2>
+
+  <div class="journal-box">
+    <textarea
+      [(ngModel)]="inputText"
+      placeholder="Write your journal here..."
+      rows="12">
+    </textarea>
+  </div>
+
+  <div class="file-section">
+    <input 
+  #fileInput 
+  type="file" 
+  (change)="onFileSelected($event)" 
+  accept=".txt,.pdf,.doc,.docx" 
+  hidden 
+/>
+    <button (click)="fileInput.click()" class="upload-btn">
+      Upload .txt File
+    </button>
+
+    <span *ngIf="selectedFile" class="file-name">
+      Selected: {{ selectedFile.name }}
+    </span>
+  </div>
+
+  <div class="button-group">
+    <button class="analyze-btn"
+            (click)="submit()"
+            [disabled]="loading">
+      {{ loading ? 'Analyzing...' : 'Analyze Journal' }}
+    </button>
+
+    <button class="clear-btn" (click)="clear()">
+      Clear
+    </button>
+  </div>
+
+  <div *ngIf="error" class="error">
+    {{ error }}
+  </div>
+
+  <div *ngIf="result" class="result-card">
+    <h3>Detected Themes</h3>
+    <ul>
+      <li *ngFor="let theme of result.detectedThemes">
+        {{ theme }}
+      </li>
+    </ul>
+
+    <h3>Sentiment</h3>
+    <p>{{ result.sentiment }}</p>
+
+    <h3>Generated Goals</h3>
+    <div *ngFor="let goal of result.goals" class="goal-item">
+      <strong>{{ goal.category }}</strong>
+      <p>{{ goal.goal }}</p>
+      <span class="priority">{{ goal.priority }}</span>
+    </div>
+  </div>
+
+</div>
